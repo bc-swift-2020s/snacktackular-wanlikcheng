@@ -34,6 +34,16 @@ class SpotDetailViewController: UIViewController {
         addressField.text = spot.address
     }
 
+    func leaveViewController()
+    {
+        let isPresentingInAddMode = presentingViewController is UINavigationController
+        if isPresentingInAddMode {
+            dismiss(animated: true, completion: nil)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
+    }
+    
     @IBAction func photoButtonPressed(_ sender: UIButton) {
     }
     
@@ -41,15 +51,17 @@ class SpotDetailViewController: UIViewController {
     }
     
     @IBAction func saveButtonPressed(_ sender: UIBarButtonItem) {
+        spot.saveData { success in
+            if success {
+                self.leaveViewController()
+            } else {
+                print("ERROR: Couldn't leave this view controller because data wasn't saved.")
+            }
+        }
     }
     
     @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
-        let isPresentingInAddMode = presentingViewController is UINavigationController
-        if isPresentingInAddMode {
-            dismiss(animated: true, completion: nil)
-        } else {
-            navigationController?.popViewController(animated: true)
-        }
+        leaveViewController()
     }
     
     @IBAction func lookupPlacePressed(_ sender: UIBarButtonItem) {
